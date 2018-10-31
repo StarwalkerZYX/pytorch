@@ -26,6 +26,7 @@ if (DEFINED ENV{PYTORCH_PYTHON})
   message(STATUS "Using python found in $ENV{PYTORCH_PYTHON}")
   set(PYCMD "$ENV{PYTORCH_PYTHON}")
 else()
+  message(STATUS "Using direct python")
   SET(PYCMD "python")
 endif()
 
@@ -127,19 +128,29 @@ if (NOT BUILD_ATEN_MOBILE)
 
   set(cwrap_files
     ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/Declarations.cwrap
+		  " "
     ${CMAKE_CURRENT_LIST_DIR}/../aten/src/THNN/generic/THNN.h
+		  " "
     ${CMAKE_CURRENT_LIST_DIR}/../aten/src/THCUNN/generic/THCUNN.h
+		  " "
     ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/nn.yaml
+		  " "
     ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/native/native_functions.yaml)
 
   FILE(GLOB all_python "${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/*.py")
 
   SET(GEN_COMMAND
-      ${PYCMD} ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/gen.py
-      --source-path ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen
-      --install_dir ${CMAKE_BINARY_DIR}/aten/src/ATen
+      ${PYCMD} " " ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/gen.py
+	  " "
+      --source-path " " ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen
+	  " "
+      --install_dir " " ${CMAKE_BINARY_DIR}/aten/src/ATen
+	  " "
       ${cwrap_files}
   )
+
+  message("NOTE1111")
+  message(${GEN_COMMAND})
 
   EXECUTE_PROCESS(
       COMMAND ${GEN_COMMAND}
