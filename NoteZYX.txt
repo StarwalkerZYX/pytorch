@@ -1,1 +1,5 @@
 python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir C:/Users/yongxin/CMakeBuilds/9969cb59-a872-3a33-9258-87a9a79efdb5/build/x64-Debug/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml
+
+conda create -n pytorchbuild
+conda activate pytorchbuild
+conda install python=3.5
