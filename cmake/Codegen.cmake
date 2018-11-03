@@ -152,12 +152,15 @@ if (NOT BUILD_ATEN_MOBILE)
   message("NOTE1111")
   message(${GEN_COMMAND})
 
+  SET(RETURN_VALUE 0)
+  message(${RETURN_VALUE})
   EXECUTE_PROCESS(
       COMMAND ${GEN_COMMAND}
         --output-dependencies ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt
         --install_dir ${CMAKE_BINARY_DIR}/aten/src/ATen
       RESULT_VARIABLE RETURN_VALUE
   )
+  message(${RETURN_VALUE})
   if (NOT RETURN_VALUE EQUAL 0)
       message(STATUS ${generated_cpp})
       message(FATAL_ERROR "Failed to get generated_cpp list")

@@ -1,4 +1,4 @@
-python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir C:/Users/yongxin/CMakeBuilds/9969cb59-a872-3a33-9258-87a9a79efdb5/build/x64-Debug/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml
+E:\Anaconda3\envs\pytorchbuild\python.exe  --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir D:/GitHub/pytorch/build/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml
 
 ```
 conda create -n pytorchbuild
@@ -31,4 +31,19 @@ def build_libs(libs):
 Failed to run 'tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2'
 ```
 
+#Codegen.cmake
+D:\GitHub\pytorch\cmake\Codegen.cmake 调用 Python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py 后返回值有问题。
+下述语句出错：
+```
+CMake Error at cmake/Codegen.cmake:163 (message):
+```
+下面的代码RETURN_VALUE为2，为啥？
+```
+  EXECUTE_PROCESS(
+      COMMAND ${GEN_COMMAND}
+        --output-dependencies ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt
+        --install_dir ${CMAKE_BINARY_DIR}/aten/src/ATen
+      RESULT_VARIABLE RETURN_VALUE
+  )
+```
 
