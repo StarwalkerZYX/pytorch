@@ -4,7 +4,8 @@ python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/p
 conda create -n pytorchbuild
 conda activate pytorchbuild
 conda install python=3.5
-SetUpWindowsEnv.bat
+conda install numpy pyyaml mkl mkl-include setuptools cmake cffi typing
+d:\GitHub\pytorch\SetUpWindowsEnv.bat
 python setup.py install
 ```
 
