@@ -1,4 +1,8 @@
-E:\Anaconda3\envs\pytorchbuild\python.exe  --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir D:/GitHub/pytorch/build/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml
+--source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir C:/Users/yongxin/CMakeBuilds/9969cb59-a872-3a33-9258-87a9a79efdb5/build/x64-Debug/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml --output-dependencies D:/GitHub/pytorch/build/aten/src/ATen/generated_cpp.txt --install_dir D:/GitHub/pytorch/build/aten/src/ATen
+
+D:\GitHub\pytorch\tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2 > d:\buildpy.txt
+
+ $env:PATH = $env:PATH + ";C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\amd64\;" + "C:\Program Files\CMake\bin\;"
 
 ```
 conda create -n pytorchbuild

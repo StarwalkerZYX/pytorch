@@ -154,17 +154,21 @@ if (NOT BUILD_ATEN_MOBILE)
 
   SET(RETURN_VALUE 0)
   message(${RETURN_VALUE})
-  EXECUTE_PROCESS(
-      COMMAND ${GEN_COMMAND}
-        --output-dependencies ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt
-        --install_dir ${CMAKE_BINARY_DIR}/aten/src/ATen
-      RESULT_VARIABLE RETURN_VALUE
-  )
-  message(${RETURN_VALUE})
+  # EXECUTE_PROCESS(
+      # COMMAND ${GEN_COMMAND}
+        # --output-dependencies ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt
+        # --install_dir ${CMAKE_BINARY_DIR}/aten/src/ATen
+      # RESULT_VARIABLE RETURN_VALUE
+  # )
+  message("${RETURN_VALUE}")
   if (NOT RETURN_VALUE EQUAL 0)
       message(STATUS ${generated_cpp})
-      message(FATAL_ERROR "Failed to get generated_cpp list")
+      # message(FATAL_ERROR "Failed to get generated_cpp list")
   endif()
+  
+  message("${CMAKE_BINARY_DIR}")
+  message("${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt")
+  
   file(READ ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt generated_cpp)
   file(READ ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt-cuda cuda_generated_cpp)
 
