@@ -1,5 +1,9 @@
-:: @echo off
+@echo on
 cd "%~dp0/.."
+
+set PATH= = %PATH%;"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\amd64\";"C:\Program Files\CMake\bin\cmake.exe"
+
+path
 
 set BASE_DIR=%cd:\=/%
 set TORCH_LIB_DIR=%cd:\=/%/torch/lib
@@ -177,7 +181,7 @@ goto:eof
   IF NOT "%PREBUILD_COMMAND%"=="" call "%PREBUILD_COMMAND%" %PREBUILD_COMMAND_ARGS%
   mkdir build
   cd build
-  cmake .. %CMAKE_GENERATOR_COMMAND% ^
+ cmake .. %CMAKE_GENERATOR_COMMAND% ^
                   -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ^
                   -DTORCH_BUILD_VERSION="%PYTORCH_BUILD_VERSION%" ^
                   -DBUILD_TORCH="%BUILD_TORCH%" ^

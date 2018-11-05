@@ -169,6 +169,10 @@ if (NOT BUILD_ATEN_MOBILE)
       message(STATUS ${generated_cpp})
 #      message(FATAL_ERROR "Failed to get generated_cpp list")
   endif()
+  
+  message("${CMAKE_BINARY_DIR}")
+  message("${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt")
+  
   file(READ ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt generated_cpp)
   file(READ ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt-cuda cuda_generated_cpp)
 
