@@ -426,6 +426,7 @@ def build_libs(libs):
 
     kwargs = {'cwd': 'build'} if not IS_WINDOWS else {}
 
+    print(' '.join(build_libs_cmd + libs))
     if subprocess.call(build_libs_cmd + libs, env=my_env, **kwargs) != 0:
         print("Failed to run '{}'".format(' '.join(build_libs_cmd + libs)))
         sys.exit(1)

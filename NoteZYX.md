@@ -1,4 +1,4 @@
-E:\Anaconda3\envs\pytorchbuild\python.exe  --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir D:/GitHub/pytorch/build/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml
+E:\Anaconda3\envs\pytorchbuild\python.exe D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir D:/GitHub/pytorch/build/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml --output-dependencies D:/GitHub/pytorch/build/aten/src/ATen/generated_cpp.txt --install_dir D:/GitHub/pytorch/build/aten/src/ATen
 
 ```
 conda create -n pytorchbuild
@@ -10,6 +10,13 @@ python setup.py install
 ```
 
 #Setup.py Build过程
+
+class:build_deps -》 function:run() -》 code:build_libs(libs)  》》》
+function:build_libs(libs) -》 code: subprocess.call(build_libs_cmd + libs, env=my_env, **kwargs) 》》》
+实际调用命令： tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2 》》》
+build_pytorch_libs.bat -》 :build_caffe2 节点 -》 调用CMake 编译caffe2文件夹 》》》
+codegen.cmake -》 Python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py
+
 ##build_deps
  Build all dependent libraries
 ```

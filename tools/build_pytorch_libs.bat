@@ -5,7 +5,7 @@ set BASE_DIR=%cd:\=/%
 set TORCH_LIB_DIR=%cd:\=/%/torch/lib
 set INSTALL_DIR=%cd:\=/%/torch/lib/tmp_install
 set THIRD_PARTY_DIR=%cd:\=/%/third_party
-set PATH=%INSTALL_DIR%/bin;%PATH%
+set PATH=%INSTALL_DIR%/bin;%PATH%;C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/MSBuild/15.0/Bin/amd64
 set BASIC_C_FLAGS= /I%INSTALL_DIR%/include /I%INSTALL_DIR%/include/TH /I%INSTALL_DIR%/include/THC /I%INSTALL_DIR%/include/THS /I%INSTALLDIR%/include/THCS /I%INSTALLDIR%/include/THPP /I%INSTALLDIR%/include/THNN /I%INSTALLDIR%/include/THCUNN
 set BASIC_CUDA_FLAGS= -I%INSTALL_DIR%/include -I%INSTALL_DIR%/include/TH -I%INSTALL_DIR%/include/THC -I%INSTALL_DIR%/include/THS -I%INSTALLDIR%/include/THCS -I%INSTALLDIR%/include/THPP -I%INSTALLDIR%/include/THNN -I%INSTALLDIR%/include/THCUNN
 set LDFLAGS=/LIBPATH:%INSTALL_DIR%/lib
