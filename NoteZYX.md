@@ -53,4 +53,10 @@ CMake Error at cmake/Codegen.cmake:163 (message):
       RESULT_VARIABLE RETURN_VALUE
   )
 ```
-
+#1D:\GitHub\pytorch\CMakeLists.txt 解读
+ Main build
+- add_subdirectory(c10)
+    - 
+- add_subdirectory(caffe2)
+##D:\GitHub\pytorch\caffe2\CMakeLists.txt
+-   add_subdirectory(../aten aten)
