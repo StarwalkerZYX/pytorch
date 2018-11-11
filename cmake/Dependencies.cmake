@@ -212,6 +212,8 @@ if(USE_GFLAGS)
         "warning with -DUSE_GFLAGS=OFF")
     caffe2_update_option(USE_GFLAGS OFF)
   endif()
+else()
+  message(“USE_GFLAGS is False”)
 endif()
 
 # ---[ Google-glog
@@ -228,6 +230,8 @@ if(USE_GLOG)
         "with -DUSE_GLOG=OFF")
     caffe2_update_option(USE_GLOG OFF)
   endif()
+else()
+  message(“USE_GLOG is False”)
 endif()
 
 
@@ -249,8 +253,10 @@ if(BUILD_TEST)
   if (NOT CAFFE2_USE_MSVC_STATIC_RUNTIME)
       set(gtest_force_shared_crt ON CACHE BOOL "force shared crt on gtest" FORCE)
   endif()
+  message("to add subdirectory third_party/googletest")
   add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../third_party/googletest)
   include_directories(SYSTEM ${CMAKE_CURRENT_LIST_DIR}/../third_party/googletest/googletest/include)
+  message("Added subdirectory third_party/googletest")
 
   # We will not need to test benchmark lib itself.
   set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Disable benchmark testing as we don't need it.")
@@ -273,6 +279,8 @@ if(USE_LMDB)
     message(WARNING "Not compiling with LMDB. Suppress this warning with -DUSE_LMDB=OFF")
     caffe2_update_option(USE_LMDB OFF)
   endif()
+else()
+  message(“USE_LMDB is False”)
 endif()
 
 if (USE_OPENCL)
@@ -297,6 +305,8 @@ if(USE_LEVELDB)
     message(WARNING "Not compiling with LevelDB. Suppress this warning with -DUSE_LEVELDB=OFF")
     caffe2_update_option(USE_LEVELDB OFF)
   endif()
+else()
+  message(“USE_LEVELDB is False”)
 endif()
 
 # ---[ NUMA

@@ -17,12 +17,12 @@ function:build_libs(libs) -》 code: subprocess.call(build_libs_cmd + libs, env=
 build_pytorch_libs.bat -》 :build_caffe2 节点 -》 调用CMake 编译caffe2文件夹 》》》
 codegen.cmake -》 Python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py
 
-##build_deps
+# 1. build_deps
  Build all dependent libraries
 ```
 class build_deps(PytorchCommand):
 ```
-### build_libs
+# 2. build_libs
 Calls build_pytorch_libs.sh/bat with the correct env variables
 ```
 def build_libs(libs):
@@ -40,7 +40,54 @@ Failed to run 'tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpac
 
 toos\build_pytorch_libs.bat被调用了，但是返回错误值。
 
-###tools\build_pytorch_libs.bat
+#3. tools\build_pytorch_libs.bat
+
+1. 设置一堆系统变量和编译变量
+1. 根据批处理输入参数 %1 来决定走哪个路径。
+```
+if "%1"=="" goto after_loop
+if "%1"=="caffe2" (
+  call:build_caffe2 %~1
+```
+1. 调用的是 :build_caffe2 路径。
+1. build_caffe2中实际调用Cmake。并且CMake目标目录是上一级目录 .. 。
+```
+cmake ..                    -DCMAKE_BUILD_TYPE=Release                   -DTORCH_BUILD_VERSION="1.0.0a0+7547e1c"                   -DBUILD_TORCH="ON"                   -DNVTOOLEXT_HOME="C:/Program Files/NVIDIA Corporation/NvToolsExt/"                   -DNO_API=ON                   -DBUILD_SHARED_LIBS="ON"                   -DBUILD_PYTHON=ON                   -DBUILD_BINARY=OFF                   -DBUILD_TEST=ON                   -DINSTALL_TEST=ON                   -DBUILD_CAFFE2_OPS=ON                   -DONNX_NAMESPACE=onnx_torch                   -DUSE_CUDA=1                   -DUSE_DISTRIBUTED=OFF                   -DUSE_NUMPY=                   -DUSE_NNPACK=1                   -DUSE_LEVELDB=OFF                   -DUSE_LMDB=OFF                   -DUSE_OPENCV=OFF                   -DUSE_QNNPACK=1                   -DUSE_FFMPEG=OFF                   -DUSE_GLOG=OFF                   -DUSE_GFLAGS=OFF                   -DUSE_SYSTEM_EIGEN_INSTALL=OFF                   -DCUDNN_INCLUDE_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0\include"                   -DCUDNN_LIB_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0\lib/x64"                   -DCUDNN_LIBRARY="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0\lib/x64\cudnn.lib"                   -DNO_MKLDNN=1                   -DMKLDNN_INCLUDE_DIR=""                   -DMKLDNN_LIB_DIR=""                   -DMKLDNN_LIBRARY=""                   -DATEN_NO_CONTRIB=1                   -DCMAKE_INSTALL_PREFIX="D:/GitHub/pytorch/torch/lib/tmp_install"                   -DCMAKE_C_FLAGS=""                   -DCMAKE_CXX_FLAGS="/EHa "                   -DCMAKE_EXE_LINKER_FLAGS=""                   -DCMAKE_SHARED_LINKER_FLAGS=""                   -DUSE_ROCM=0 
+```
+#4.pytorch/CMakeLists.txt
+最顶级CMakeList
+
+##4.1 Line 133 添加子目录
+
+```
+# ---[ Main build
+  add_subdirectory(c10)
+  add_subdirectory(caffe2)
+```
+##4.2 Line 202
+
+```
+# ---[ Dependencies 添加依赖文件
+include(cmake/Dependencies.cmake)
+```
+
+##4.3 Dependencies 报错
+```
+CMake Error at cmake/public/cuda.cmake:278 (message):
+  CUDA support not available with 32-bit windows.  Did you forget to set
+  Win64 in the generator target?
+Call Stack (most recent call first):
+  cmake/Dependencies.cmake:569 (include)
+  CMakeLists.txt:202 (include)
+```
+
+
+-------
+
+##D:\GitHub\pytorch\caffe2\CMakeLists.txt
+-   add_subdirectory(../aten aten)
+ 
+
 
 
 #Codegen.cmake
