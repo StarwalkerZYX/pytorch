@@ -38,6 +38,11 @@ def build_libs(libs):
 Failed to run 'tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2'
 ```
 
+toos\build_pytorch_libs.bat被调用了，但是返回错误值。
+
+###tools\build_pytorch_libs.bat
+
+
 #Codegen.cmake
 D:\GitHub\pytorch\cmake\Codegen.cmake 调用 Python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py 后返回值有问题。
 下述语句出错：
