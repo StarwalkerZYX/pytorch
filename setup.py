@@ -353,6 +353,9 @@ def check_pydep(importname, module):
 
 # Calls build_pytorch_libs.sh/bat with the correct env variables
 def build_libs(libs):
+
+    print('setup.py: build_libs(): start with libs {0}'.format(libs))
+
     for lib in libs:
         assert lib in dep_libs, 'invalid lib: {}'.format(lib)
     if IS_WINDOWS:
@@ -426,9 +429,9 @@ def build_libs(libs):
 
     kwargs = {'cwd': 'build'} if not IS_WINDOWS else {}
 
-    print(' '.join(build_libs_cmd + libs))
+    print('setup.py: ' + ' '.join(build_libs_cmd + libs))
     if subprocess.call(build_libs_cmd + libs, env=my_env, **kwargs) != 0:
-        print("Failed to run '{}'".format(' '.join(build_libs_cmd + libs)))
+        print("setup.py: Failed to run '{}'".format(' '.join(build_libs_cmd + libs)))
         sys.exit(1)
 
 
@@ -470,6 +473,8 @@ class build_deps(PytorchCommand):
         if USE_NCCL and not USE_SYSTEM_NCCL:
             libs += ['nccl']
         libs += ['caffe2']
+
+        print('setup.py::build_deps::run(): to call build_libs(libs)')
         build_libs(libs)
 
         # Use copies instead of symbolic files.

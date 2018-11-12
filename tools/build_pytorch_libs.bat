@@ -3,8 +3,6 @@ cd "%~dp0/.."
 
 set PATH= = %PATH%;"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\amd64\";"C:\Program Files\CMake\bin\cmake.exe"
 
-path
-
 set BASE_DIR=%cd:\=/%
 set TORCH_LIB_DIR=%cd:\=/%/torch/lib
 set INSTALL_DIR=%cd:\=/%/torch/lib/tmp_install
@@ -14,6 +12,10 @@ set BASIC_C_FLAGS= /I%INSTALL_DIR%/include /I%INSTALL_DIR%/include/TH /I%INSTALL
 set BASIC_CUDA_FLAGS= -I%INSTALL_DIR%/include -I%INSTALL_DIR%/include/TH -I%INSTALL_DIR%/include/THC -I%INSTALL_DIR%/include/THS -I%INSTALLDIR%/include/THCS -I%INSTALLDIR%/include/THPP -I%INSTALLDIR%/include/THNN -I%INSTALLDIR%/include/THCUNN
 set LDFLAGS=/LIBPATH:%INSTALL_DIR%/lib
 :: set TORCH_CUDA_ARCH_LIST=6.1
+
+echo The following line is added by ZYX
+set CMAKE_GENERATOR = Visual Studio 15 2017 Win64
+echo "%CMAKE_GENERATOR%"
 
 set CWRAP_FILES=%BASE_DIR%/torch/lib/ATen/Declarations.cwrap;%BASE_DIR%/torch/lib/ATen/Local.cwrap;%BASE_DIR%/torch/lib/THNN/generic/THNN.h;%BASE_DIR%/torch/lib/THCUNN/generic/THCUNN.h;%BASE_DIR%/torch/lib/ATen/nn.yaml
 set C_FLAGS=%BASIC_C_FLAGS% /D_WIN32 /Z7 /EHa /DNOMINMAX
@@ -83,17 +85,22 @@ IF NOT DEFINED BUILD_SHARED_LIBS (
   set BUILD_SHARED_LIBS=ON
 )
 
-IF "%CMAKE_GENERATOR%"=="" (
+echo Warning: CMAKE_GENERATOR is "%CMAKE_GENERATOR%"
+
+IF "DUMMY"=="" (
   set CMAKE_GENERATOR_COMMAND=
+  echo set CMAKE_GENERATOR_COMMAND=
   set MAKE_COMMAND=msbuild INSTALL.vcxproj /p:Configuration=Release
+  echo set MAKE_COMMAND=msbuild INSTALL.vcxproj /p:Configuration=Release
 ) ELSE (
-  set CMAKE_GENERATOR_COMMAND=-G "%CMAKE_GENERATOR%"
+  set CMAKE_GENERATOR_COMMAND=-G Visual Studio 15 2017 Win64
   IF "%CMAKE_GENERATOR%"=="Ninja" (
     IF "%CC%"== "" set CC=cl.exe
     IF "%CXX%"== "" set CXX=cl.exe
     set MAKE_COMMAND=cmake --build . --target install --config %BUILD_TYPE% -- -j%MAX_JOBS%
   ) ELSE (
     set MAKE_COMMAND=msbuild INSTALL.vcxproj /p:Configuration=%BUILD_TYPE%
+	echo %CMAKE_GENERATOR_COMMAND%
   )
 )
 
@@ -140,6 +147,7 @@ goto:eof
   mkdir build\%~1
   cd build/%~1
   cmake ../../%~1 %CMAKE_GENERATOR_COMMAND% ^
+				  -G"Visual Studio 15 2017 Win64"^
                   -DCMAKE_MODULE_PATH=%BASE_DIR%/cmake/FindCUDA ^
                   -DTorch_FOUND="1" ^
                   -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%" ^
