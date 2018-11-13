@@ -14,7 +14,7 @@ set LDFLAGS=/LIBPATH:%INSTALL_DIR%/lib
 :: set TORCH_CUDA_ARCH_LIST=6.1
 
 echo The following line is added by ZYX
-set CMAKE_GENERATOR = Visual Studio 15 2017 Win64
+set CMAKE_GENERATOR=Visual Studio 15 2017 Win64
 echo "%CMAKE_GENERATOR%"
 
 set CWRAP_FILES=%BASE_DIR%/torch/lib/ATen/Declarations.cwrap;%BASE_DIR%/torch/lib/ATen/Local.cwrap;%BASE_DIR%/torch/lib/THNN/generic/THNN.h;%BASE_DIR%/torch/lib/THCUNN/generic/THCUNN.h;%BASE_DIR%/torch/lib/ATen/nn.yaml
@@ -87,23 +87,19 @@ IF NOT DEFINED BUILD_SHARED_LIBS (
 
 echo Warning: CMAKE_GENERATOR is "%CMAKE_GENERATOR%"
 
-IF "DUMMY"=="" (
+IF "%CMAKE_GENERATOR%"=="" (
   set CMAKE_GENERATOR_COMMAND=
-  echo set CMAKE_GENERATOR_COMMAND=
   set MAKE_COMMAND=msbuild INSTALL.vcxproj /p:Configuration=Release
-  echo set MAKE_COMMAND=msbuild INSTALL.vcxproj /p:Configuration=Release
 ) ELSE (
-  set CMAKE_GENERATOR_COMMAND=-G Visual Studio 15 2017 Win64
+  set CMAKE_GENERATOR_COMMAND=-G "%CMAKE_GENERATOR%"
   IF "%CMAKE_GENERATOR%"=="Ninja" (
     IF "%CC%"== "" set CC=cl.exe
     IF "%CXX%"== "" set CXX=cl.exe
     set MAKE_COMMAND=cmake --build . --target install --config %BUILD_TYPE% -- -j%MAX_JOBS%
   ) ELSE (
     set MAKE_COMMAND=msbuild INSTALL.vcxproj /p:Configuration=%BUILD_TYPE%
-	echo %CMAKE_GENERATOR_COMMAND%
   )
 )
-
 
 :read_loop
 if "%1"=="" goto after_loop
