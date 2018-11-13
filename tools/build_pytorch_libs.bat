@@ -100,6 +100,7 @@ IF "%CMAKE_GENERATOR%"=="" (
     set MAKE_COMMAND=msbuild INSTALL.vcxproj /p:Configuration=%BUILD_TYPE%
   )
 )
+echo Warning: "%CMAKE_GENERATOR_COMMAND%"
 
 :read_loop
 if "%1"=="" goto after_loop
