@@ -1,4 +1,6 @@
 # ---[ Generate and install header and cpp files
+message(STATUS "caffe2/CMakeLists: start--------------------------------")
+
 include(../cmake/Codegen.cmake)
 
 # ---[ Declare source file lists

@@ -4,6 +4,8 @@
 # - Creates an ATen target for its generated C++ files and adds it
 #   as a dependency
 
+message("cmake/codegen.cmake: start...........")
+
 ################################################################################
 # Helper functions
 ################################################################################
@@ -140,34 +142,33 @@ if (NOT BUILD_ATEN_MOBILE)
   FILE(GLOB all_python "${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/*.py")
 
   SET(GEN_COMMAND
-      ${PYCMD} " " ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/gen.py
-	  " "
-      --source-path " " ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen
-	  " "
-      --install_dir " " ${CMAKE_BINARY_DIR}/aten/src/ATen
-	  " "
+      ${PYCMD} ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/gen.py
+	        -s ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen
+	        -d ${CMAKE_BINARY_DIR}/aten/src/ATen
       ${cwrap_files}
   )
 
-  message("NOTE1111")
-  message(${GEN_COMMAND})
+  message("cmake/codegen.cmake: to run python command--------------------------------------------------")
 
-  SET(RETURN_VALUE 0)
-  message(${RETURN_VALUE})
   EXECUTE_PROCESS(
       COMMAND ${GEN_COMMAND}
-        --output-dependencies ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt
-        --install_dir ${CMAKE_BINARY_DIR}/aten/src/ATen
+        -o ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt
+        -d ${CMAKE_BINARY_DIR}/aten/src/ATen
       RESULT_VARIABLE RETURN_VALUE
   )
-  message("Run Python command:" " " ${GEN_COMMAND}
+  message(WARNING "cmake/codegen.cmake return_value: ": ${RETURN_VALUE})
+  
+  message("cmake/codegen.cmake: Run Python command:" " " ${GEN_COMMAND}
         " " --output-dependencies " " ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt
         " " --install_dir " " ${CMAKE_BINARY_DIR}/aten/src/ATen)
+  
+  message("cmake/codegen.cmake: call python command returned--------------------------------------------------")
 
-  message(${RETURN_VALUE})
+
+  
   if (NOT RETURN_VALUE EQUAL 0)
-      message(STATUS ${generated_cpp})
-#      message(FATAL_ERROR "Failed to get generated_cpp list")
+     message(STATUS ${generated_cpp})
+     message(FATAL_ERROR "Failed to get generated_cpp list")
   endif()
   
   message("${CMAKE_BINARY_DIR}")

@@ -1,21 +1,70 @@
-E:\Anaconda3\envs\pytorchbuild\python.exe D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir D:/GitHub/pytorch/build/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml --output-dependencies D:/GitHub/pytorch/build/aten/src/ATen/generated_cpp.txt --install_dir D:/GitHub/pytorch/build/aten/src/ATen
-
+# 安装步骤
+在Anaconda Prompt中依次执行下述语句
 ```
 conda create -n pytorchbuild
 conda activate pytorchbuild
 conda install python=3.5
 conda install numpy pyyaml mkl mkl-include setuptools cmake cffi typing
 d:\GitHub\pytorch\SetUpWindowsEnv.bat
-python setup.py install
+python setup.py install > d:\pybuild.txt
 ```
 
-#Setup.py Build过程
+#To continue
+## 1. python setup.py install > d:\pybuild.txt 报错
+```
+setup.py: tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2
+setup.py: Failed to run 'tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2'
+```
+## 2.tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2 报错
 
-class:build_deps -》 function:run() -》 code:build_libs(libs)  》》》
-function:build_libs(libs) -》 code: subprocess.call(build_libs_cmd + libs, env=my_env, **kwargs) 》》》
-实际调用命令： tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2 》》》
-build_pytorch_libs.bat -》 :build_caffe2 节点 -》 调用CMake 编译caffe2文件夹 》》》
-codegen.cmake -》 Python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py
+```
+(pytorchbuild) d:\GitHub\pytorch\build>cmake .. -G "Visual Studio 15 2017 Win64"                   -DCMAKE_BUILD_TYPE=Release                   -DTORCH_BUILD_VERSION="1.0.0a0+b5efc36"                   -DBUILD_TORCH="ON"                   -DNVTOOLEXT_HOME="C:/Program Files/NVIDIA Corporation/NvToolsExt/"                   -DNO_API=ON                   -DBUILD_SHARED_LIBS="ON"                   -DBUILD_PYTHON=ON                   -DBUILD_BINARY=OFF                   -DBUILD_TEST=ON                   -DINSTALL_TEST=ON                   -DBUILD_CAFFE2_OPS=ON                   -DONNX_NAMESPACE=onnx_torch                   -DUSE_CUDA=1                   -DUSE_DISTRIBUTED=OFF                   -DUSE_NUMPY=                   -DUSE_NNPACK=1                   -DUSE_LEVELDB=OFF                   -DUSE_LMDB=OFF                   -DUSE_OPENCV=OFF                   -DUSE_QNNPACK=1                   -DUSE_FFMPEG=OFF                   -DUSE_GLOG=OFF                   -DUSE_GFLAGS=OFF                   -DUSE_SYSTEM_EIGEN_INSTALL=OFF                   -DCUDNN_INCLUDE_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0\include"                   -DCUDNN_LIB_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0\lib/x64"                   -DCUDNN_LIBRARY="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0\lib/x64\cudnn.lib"                   -DNO_MKLDNN=1                   -DMKLDNN_INCLUDE_DIR=""                   -DMKLDNN_LIB_DIR=""                   -DMKLDNN_LIBRARY=""                   -DATEN_NO_CONTRIB=1                   -DCMAKE_INSTALL_PREFIX="d:/GitHub/pytorch/torch/lib/tmp_install"                   -DCMAKE_C_FLAGS=""                   -DCMAKE_CXX_FLAGS="/EHa "                   -DCMAKE_EXE_LINKER_FLAGS=""                   -DCMAKE_SHARED_LINKER_FLAGS=""                   -DUSE_ROCM=0 
+
+```
+## 3. cmake .. 报错
+
+```
+-- Configuring incomplete, errors occurred!
+See also "D:/GitHub/pytorch/build/CMakeFiles/CMakeOutput.log".
+See also "D:/GitHub/pytorch/build/CMakeFiles/CMakeError.log".
+
+(pytorchbuild) d:\GitHub\pytorch\build>msbuild INSTALL.vcxproj /p:Configuration=Release 
+用于 .NET Framework 的 Microsoft (R) 生成引擎版本 15.8.169+g1ccb72aefa
+版权所有(C) Microsoft Corporation。保留所有权利。
+
+MSBUILD : error MSB1009: 项目文件不存在。
+开关:INSTALL.vcxproj
+```
+## 4. 使用CMake GUI重现和查看CMake过程信息
+CMakeGUI在处理 《 D:/GitHub/pytorch/caffe2》目录时报错。
+```
+Entering             D:/GitHub/pytorch/caffe2
+Using direct python
+NOTE1111
+python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir D:/GitHub/pytorch/build/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml
+0
+p
+ython: can't open file ' ': [Errno 2] No such file or directory
+
+```
+Entering             D:/GitHub/pytorch/caffe2
+##查看pytorch/build/CMakeFiles/CMakeOutput.log
+
+
+
+# Setup.py Build总体过程
+
+
+
+- class:build_deps -》 function:run() -》 code:build_libs(libs)  》》》
+
+- function:build_libs(libs) -》 code: subprocess.call(build_libs_cmd + libs, env=my_env, **kwargs) 》》》
+
+- 实际调用命令： tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpack caffe2 》》》
+
+- build_pytorch_libs.bat -》 :build_caffe2 节点 -》 调用CMake 编译caffe2文件夹 》》》
+
+- codegen.cmake -》 Python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py
 
 # 1. build_deps
  Build all dependent libraries
@@ -40,7 +89,7 @@ Failed to run 'tools\build_pytorch_libs.bat --use-cuda --use-nnpack --use-qnnpac
 
 toos\build_pytorch_libs.bat被调用了，但是返回错误值。
 
-#3. tools\build_pytorch_libs.bat
+# 3. tools\build_pytorch_libs.bat
 
 1. 设置一堆系统变量和编译变量
 1. 根据批处理输入参数 %1 来决定走哪个路径。
@@ -54,10 +103,10 @@ if "%1"=="caffe2" (
 ```
 cmake ..                    -DCMAKE_BUILD_TYPE=Release                   -DTORCH_BUILD_VERSION="1.0.0a0+7547e1c"                   -DBUILD_TORCH="ON"                   -DNVTOOLEXT_HOME="C:/Program Files/NVIDIA Corporation/NvToolsExt/"                   -DNO_API=ON                   -DBUILD_SHARED_LIBS="ON"                   -DBUILD_PYTHON=ON                   -DBUILD_BINARY=OFF                   -DBUILD_TEST=ON                   -DINSTALL_TEST=ON                   -DBUILD_CAFFE2_OPS=ON                   -DONNX_NAMESPACE=onnx_torch                   -DUSE_CUDA=1                   -DUSE_DISTRIBUTED=OFF                   -DUSE_NUMPY=                   -DUSE_NNPACK=1                   -DUSE_LEVELDB=OFF                   -DUSE_LMDB=OFF                   -DUSE_OPENCV=OFF                   -DUSE_QNNPACK=1                   -DUSE_FFMPEG=OFF                   -DUSE_GLOG=OFF                   -DUSE_GFLAGS=OFF                   -DUSE_SYSTEM_EIGEN_INSTALL=OFF                   -DCUDNN_INCLUDE_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0\include"                   -DCUDNN_LIB_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0\lib/x64"                   -DCUDNN_LIBRARY="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0\lib/x64\cudnn.lib"                   -DNO_MKLDNN=1                   -DMKLDNN_INCLUDE_DIR=""                   -DMKLDNN_LIB_DIR=""                   -DMKLDNN_LIBRARY=""                   -DATEN_NO_CONTRIB=1                   -DCMAKE_INSTALL_PREFIX="D:/GitHub/pytorch/torch/lib/tmp_install"                   -DCMAKE_C_FLAGS=""                   -DCMAKE_CXX_FLAGS="/EHa "                   -DCMAKE_EXE_LINKER_FLAGS=""                   -DCMAKE_SHARED_LINKER_FLAGS=""                   -DUSE_ROCM=0 
 ```
-#4.pytorch/CMakeLists.txt
+# 4.pytorch/CMakeLists.txt
 最顶级CMakeList
 
-##4.1 Line 133 添加子目录
+##4.1 Line 335 添加子目录
 
 ```
 # ---[ Main build
@@ -112,3 +161,7 @@ CMake Error at cmake/Codegen.cmake:163 (message):
 - add_subdirectory(caffe2)
 ##D:\GitHub\pytorch\caffe2\CMakeLists.txt
 -   add_subdirectory(../aten aten)
+
+
+#备忘
+E:\Anaconda3\envs\pytorchbuild\python.exe D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir D:/GitHub/pytorch/build/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml --output-dependencies D:/GitHub/pytorch/build/aten/src/ATen/generated_cpp.txt --install_dir D:/GitHub/pytorch/build/aten/src/ATen

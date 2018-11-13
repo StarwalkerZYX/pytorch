@@ -23,6 +23,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #    endif()
 set(CAFFE2_CMAKE_BUILDING_WITH_MAIN_REPO ON)
 
+message(STATUS "Pytorch/CMakeLists.txt start")
+
 if(NOT DEFINED BLAS_SET_BY_USER)
   if(DEFINED BLAS)
     set(BLAS_SET_BY_USER TRUE)
@@ -107,7 +109,7 @@ option(USE_OPENCL "Use OpenCL" OFF)
 option(USE_OPENCV "Use OpenCV" ON)
 option(USE_OPENMP "Use OpenMP for parallel code" OFF)
 option(USE_PROF "Use profiling" OFF)
-option(USE_QNNPACK "Use QNNPACK (quantized 8-bit operators)" ON)
+option(USE_QNNPACK "Use QNNPACK (quantized 8-bit operators)" OFF)
 option(USE_REDIS "Use Redis" OFF)
 option(USE_ROCKSDB "Use RocksDB" OFF)
 option(USE_SNPE "Use Qualcomm's SNPE library" OFF)
@@ -199,6 +201,7 @@ include(cmake/MiscCheck.cmake)
 include(ExternalProject)
 
 # ---[ Dependencies
+message(STATUS "Pytorch/CMakeLists to include cmake/Dependencies.cmake-------------------------------------")
 include(cmake/Dependencies.cmake)
 
 # ---[ Whitelist file if whitelist is specified
@@ -331,7 +334,10 @@ include_directories(BEFORE ${PROJECT_BINARY_DIR})
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/aten/src/)
 
 # ---[ Main build
+message(STATUS "pytorch/CMakeLists: To add subdirectory(c10)")
 add_subdirectory(c10)
+
+message(STATUS "pytorch/CMakeLists: To add subdirectory(caffe2)")
 add_subdirectory(caffe2)
 
 # --[ Documentation
