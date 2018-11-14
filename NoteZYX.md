@@ -9,6 +9,11 @@ d:\GitHub\pytorch\SetUpWindowsEnv.bat
 python setup.py install > d:\pybuild.txt
 ```
 
+#Git操作
+```
+
+```
+
 #To continue
 ## 1. python setup.py install > d:\pybuild.txt 报错
 ```
@@ -47,8 +52,43 @@ p
 ython: can't open file ' ': [Errno 2] No such file or directory
 
 ```
-Entering             D:/GitHub/pytorch/caffe2
-##查看pytorch/build/CMakeFiles/CMakeOutput.log
+
+## 5. 推荐使用VS2017打开PyTorch文件夹，调试CMake文件
+修改了codegen.cmake文件，CMake能够完成Configure & Generate
+上面的“python D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py”部分，由于之前在Codegen.cmake中加入了“空格”便于查看，导致了传入给gen.py的参数不正确。删除空格后，python能够正确调用gen.py。
+CMake能够完成Configure&Generate。但是编译错误。
+
+## 6. 使用VS2107 Build “d:/GitHub/pytorch/build/Caffe2.sln”
+
+遇到第一个错误：
+```
+错误	C1083	无法打开包括文件: “Eigen/Core”: No such file or directory (编译源文件 D:\GitHub\pytorch\caffe2\utils\math_cpu.cc)	caffe2	d:\github\pytorch\caffe2\utils\eigen_utils.h	6	
+```
+发现d:/GitHub/pytorch/third_party/eigen/目录为空
+
+## 7. 调查如何CheckOut Submodule
+
+[参考网页](https://www.cnblogs.com/ligun123/p/4139883.html"参考网页“)
+依次执行
+
+``` git
+git submodule sync
+git submodule update –init
+#系统报错
+fatal: Needed a single revision
+Unable to find current revision in submodule path 'third_party/eigen'
+#手工删除 d:\GitHub\pytorch\third_party\eigen\
+#再次执行
+git submodule update –init
+```
+
+## 8. 用VS2017再次Build
+第一次Build，pybind_state??？项目有错误。
+直接再编译一次，就全部通过了！！！
+
+
+
+
 
 
 
