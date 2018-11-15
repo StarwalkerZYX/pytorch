@@ -91,10 +91,55 @@ git submodule update –init
 
 
 
+# Setup.py解读
+##关键函数
+```python
+# Calls build_pytorch_libs.sh/bat with the correct env variables
+def build_libs(libs):
+```
+##关键类
+```python
+# Build all dependent libraries
+class build_deps(PytorchCommand):
+```
+##定义依赖的Library
+```python
+################################################################################
+# Building dependent libraries
+################################################################################
 
-# Setup.py Build总体过程
+# All libraries that torch could depend on
+dep_libs = [
+    'nccl', 'caffe2',
+    'libshm', 'libshm_windows'
+]
+```
+##填写要Build Library命令数组
+*Line 499*
+**build_dep_cmds**
+```
+build_dep_cmds =
+ {dict}
+  {'build_libshm_windows': <class '__main__.build_dep'>, 'build_caffe2': <class '__main__.build_dep'>, 'build_libshm': <class '__main__.build_dep'>, 'build_nccl': <class '__main__.build_dep'>}
+ 'build_caffe2' (2030500097584) = {type} <class '__main__.build_dep'>
+ 'build_libshm' (2030499959728) = {type} <class '__main__.build_dep'>
+ 'build_libshm_windows' (2030499382304) = {type} <class '__main__.build_dep'>
+ 'build_nccl' (2030499922032) = {type} <class '__main__.build_dep'>
+ __len__ = {int} 4
+```
+**rebuild_dep_cmds**
+```
+rebuild_dep_cmds =
+ {dict}
+  {'rebuild_libshm': <class '__main__.rebuild_dep'>, 'rebuild_libshm_windows': <class '__main__.rebuild_dep'>, 'rebuild_caffe2': <class '__main__.rebuild_dep'>, 'rebuild_nccl': <class '__main__.rebuild_dep'>}
+ 'rebuild_caffe2' (2030500029872) = {type} <class '__main__.rebuild_dep'>
+ 'rebuild_libshm' (2030499962608) = {type} <class '__main__.rebuild_dep'>
+ 'rebuild_libshm_windows' (2030500057000) = {type} <class '__main__.rebuild_dep'>
+ 'rebuild_nccl' (2030499350320) = {type} <class '__main__.rebuild_dep'>
+ __len__ = {int} 4
+```
 
-
+# #Setup.py Build总体过程
 
 - class:build_deps -》 function:run() -》 code:build_libs(libs)  》》》
 
