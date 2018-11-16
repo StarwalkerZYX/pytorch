@@ -92,16 +92,49 @@ git submodule update –init
 
 
 # Setup.py解读
-##关键函数
+##总体思路
+**前半部分**：准备后面Setup结构中需要用到的各项变量；重载自定义setup中将要调用的各项过程函数。
+**后半部分**: 填写好setup()结构体；按照setup预定义流程调用各项函数。
 ```python
-# Calls build_pytorch_libs.sh/bat with the correct env variables
-def build_libs(libs):
+if __name__ == '__main__':
+    setup(
 ```
-##关键类
+## 1. class install
+由于外部在调用setup.py中传入的参数为install，所以依靠后台dist.py中 *run_command(self, command)* 函数调用在setup.py中已经重载定义的 ** class install **。并进一步调用build_deps函数。
+````python
+class install(setuptools.command.install.install):
+    def run(self):
+        print('setup.py::run()')
+        if not self.skip_build:
+            self.run_command('build_deps')
+        setuptools.command.install.install.run(self)`
+```
+
+## 2. class build_deps
+
 ```python
 # Build all dependent libraries
 class build_deps(PytorchCommand):
 ```
+
+定义一个libs数组，定义要Build的libs
+```
+     libs = []
+        if USE_NCCL and not USE_SYSTEM_NCCL:
+            libs += ['nccl']
+        libs += ['caffe2']
+
+        print('setup.py::build_deps::run(): to call build_libs(libs)')
+        build_libs(libs)
+```
+
+##def build_libs
+
+```python
+# Calls build_pytorch_libs.sh/bat with the correct env variables
+def build_libs(libs):
+```
+
 ##定义依赖的Library
 ```python
 ################################################################################
