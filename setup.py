@@ -600,6 +600,8 @@ build_ext_parent = ninja_build_ext if USE_NINJA \
 class build_ext(build_ext_parent):
 
     def run(self):
+        print('setup.py: class build_ext(build_ext_parent):run()')
+
         # Print build options
         if USE_NUMPY:
             print('-- Building with NumPy bindings')
@@ -673,6 +675,7 @@ class build_ext(build_ext_parent):
         # setuptools. Only the contents of this folder are installed in the
         # "install" command by default.
         # We only make this copy for Caffe2's pybind extensions
+        print('setup.py: build_extensions()...........................')
         caffe2_pybind_exts = [
             'caffe2.python.caffe2_pybind11_state',
             'caffe2.python.caffe2_pybind11_state_gpu',
@@ -836,7 +839,9 @@ include_dirs += [
     tmp_install_path + "/include/ATen",
     third_party_path + "/pybind11/include",
     os.path.join(cwd, "torch", "csrc"),
-    "build/third_party",
+    "d:/GitHb/build/third_party",
+    "d:/GitHub/pytorch/aten/src/THC",
+    "D:/GitHub/pytorch/third_party/eigen/Eigen/src/Core"
 ]
 
 library_dirs.append(lib_path)

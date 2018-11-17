@@ -75,6 +75,8 @@ def generate_code(ninja_global=None,
                   install_dir=None):
     # if ninja is enabled, we just register this file as something
     # ninja will need to call if needed
+    print('pytorch\tools\setup_helpers\generate_code.py: generate_code()')
+
     if ninja_global is not None:
         return generate_code_ninja(ninja_global)
 

@@ -73,118 +73,71 @@ CMake能够完成Configure&Generate。但是编译错误。
 
 ``` git
 git submodule sync
-git submodule update –-init
+git submodule update –init
 #系统报错
 fatal: Needed a single revision
 Unable to find current revision in submodule path 'third_party/eigen'
 #手工删除 d:\GitHub\pytorch\third_party\eigen\
 #再次执行
-git submodule update –-init
+git submodule update –init
 ```
 
 ## 8. 用VS2017再次Build
 第一次Build，pybind_state??？项目有错误。
 直接再编译一次，就全部通过了！！！
 
+## 9.pytorch\tools\setup_helpers\generate_code.py: generate_code() 
 
+setup.py注释掉tools\build_pytorch_libs.bat，再次执行。发现上述函数中报错退出。
 
+```
+c:\programdata\anaconda3\envs\pytorchbuild\include\pyconfig.h(68): fatal error C1083: Cannot open 
+include file: 'io.h': No such file or directory
+```
 
+**calling stack**
 
+```
+build_extension, build_ext.py:527
+build_extension, build_ext.py:199
+_build_extensions_serial, build_ext.py:473
+build_extensions, build_ext.py:448
+build_extensions, setup.py:706
+run, build_ext.py:339
+run, build_ext.py:78
+run, setup.py:651
+```
+***Note: build_ext.py是系统自带文件。 C:/ProgramData/Anaconda3/envs/pytorchbuild/Lib/distutils/command/build_ext.py ***
 
-# Setup.py解读
-##总体思路
-**前半部分**：准备后面Setup结构中需要用到的各项变量；重载自定义setup中将要调用的各项过程函数。
-**后半部分**: 填写好setup()结构体；按照setup预定义流程调用各项函数。
+## 10.include_dirs 增加路径
+setup.py， Line 834:
 ```python
-if __name__ == '__main__':
-    setup(
-```
-## 1. class install
-由于外部在调用setup.py中传入的参数为install，所以依靠后台dist.py中 *run_command(self, command)* 函数调用在setup.py中已经重载定义的 ** class install **。并进一步调用build_deps函数。
-````python
-class install(setuptools.command.install.install):
-    def run(self):
-        print('setup.py::run()')
-        if not self.skip_build:
-            self.run_command('build_deps')
-        setuptools.command.install.install.run(self)`
-```
-
-## 2. class build_deps
-
-```python
-# Build all dependent libraries
-class build_deps(PytorchCommand):
-```
-
-定义一个libs数组，定义要Build的libs
-```
-     libs = []
-        if USE_NCCL and not USE_SYSTEM_NCCL:
-            libs += ['nccl']
-        libs += ['caffe2']
-
-        print('setup.py::build_deps::run(): to call build_libs(libs)')
-        build_libs(libs)
-```
-
-##def build_libs
-
-```python
-# Calls build_pytorch_libs.sh/bat with the correct env variables
-def build_libs(libs):
-```
-
-##定义依赖的Library
-```python
-################################################################################
-# Building dependent libraries
-################################################################################
-
-# All libraries that torch could depend on
-dep_libs = [
-    'nccl', 'caffe2',
-    'libshm', 'libshm_windows'
+include_dirs += [
+    cwd,
+    tmp_install_path + "/include",
+    tmp_install_path + "/include/TH",
+    tmp_install_path + "/include/THNN",
+    tmp_install_path + "/include/ATen",
+    third_party_path + "/pybind11/include",
+    os.path.join(cwd, "torch", "csrc"),
+    "build/third_party",
+    "aten/src/THC", #新增加的路径
 ]
 ```
 
-##run command build
 
-## running install
-## running build_deps
-## running build_py
-会调用到
-```python
-class build_py(setuptools.command.build_py.build_py):
-```
-##running build_ext
 
-##填写要Build Library命令数组
-*Line 499*
-**build_dep_cmds**
-```
-build_dep_cmds =
- {dict}
-  {'build_libshm_windows': <class '__main__.build_dep'>, 'build_caffe2': <class '__main__.build_dep'>, 'build_libshm': <class '__main__.build_dep'>, 'build_nccl': <class '__main__.build_dep'>}
- 'build_caffe2' (2030500097584) = {type} <class '__main__.build_dep'>
- 'build_libshm' (2030499959728) = {type} <class '__main__.build_dep'>
- 'build_libshm_windows' (2030499382304) = {type} <class '__main__.build_dep'>
- 'build_nccl' (2030499922032) = {type} <class '__main__.build_dep'>
- __len__ = {int} 4
-```
-**rebuild_dep_cmds**
-```
-rebuild_dep_cmds =
- {dict}
-  {'rebuild_libshm': <class '__main__.rebuild_dep'>, 'rebuild_libshm_windows': <class '__main__.rebuild_dep'>, 'rebuild_caffe2': <class '__main__.rebuild_dep'>, 'rebuild_nccl': <class '__main__.rebuild_dep'>}
- 'rebuild_caffe2' (2030500029872) = {type} <class '__main__.rebuild_dep'>
- 'rebuild_libshm' (2030499962608) = {type} <class '__main__.rebuild_dep'>
- 'rebuild_libshm_windows' (2030500057000) = {type} <class '__main__.rebuild_dep'>
- 'rebuild_nccl' (2030499350320) = {type} <class '__main__.rebuild_dep'>
- __len__ = {int} 4
-```
 
-# #Setup.py Build总体过程
+
+
+
+
+
+
+
+# Setup.py Build总体过程
+
+
 
 - class:build_deps -》 function:run() -》 code:build_libs(libs)  》》》
 
