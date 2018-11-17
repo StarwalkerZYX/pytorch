@@ -73,13 +73,13 @@ CMake能够完成Configure&Generate。但是编译错误。
 
 ``` git
 git submodule sync
-git submodule update –init
+git submodule update –-init
 #系统报错
 fatal: Needed a single revision
 Unable to find current revision in submodule path 'third_party/eigen'
 #手工删除 d:\GitHub\pytorch\third_party\eigen\
 #再次执行
-git submodule update –init
+git submodule update –-init
 ```
 
 ## 8. 用VS2017再次Build
@@ -147,6 +147,18 @@ dep_libs = [
     'libshm', 'libshm_windows'
 ]
 ```
+
+##run command build
+
+## running install
+## running build_deps
+## running build_py
+会调用到
+```python
+class build_py(setuptools.command.build_py.build_py):
+```
+##running build_ext
+
 ##填写要Build Library命令数组
 *Line 499*
 **build_dep_cmds**

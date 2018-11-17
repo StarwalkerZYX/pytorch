@@ -430,9 +430,11 @@ def build_libs(libs):
     kwargs = {'cwd': 'build'} if not IS_WINDOWS else {}
 
     print('setup.py: ' + ' '.join(build_libs_cmd + libs))
-    if subprocess.call(build_libs_cmd + libs, env=my_env, **kwargs) != 0:
-        print("setup.py: Failed to run '{}'".format(' '.join(build_libs_cmd + libs)))
-        sys.exit(1)
+    #ToDO: ZYX, do it manually here and continue
+    print('setup.py: ' + 'ZYX, do it manually here and continue ')
+    # if subprocess.call(build_libs_cmd + libs, env=my_env, **kwargs) != 0:
+    #     print("setup.py: Failed to run '{}'".format(' '.join(build_libs_cmd + libs)))
+    #     sys.exit(1)
 
 
 # Copy Caffe2's Python proto files (generated during the build with the
