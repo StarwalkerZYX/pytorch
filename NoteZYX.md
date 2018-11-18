@@ -120,20 +120,36 @@ include_dirs += [
     tmp_install_path + "/include/ATen",
     third_party_path + "/pybind11/include",
     os.path.join(cwd, "torch", "csrc"),
-    "build/third_party",
-    "aten/src/THC", #新增加的路径
+    "d:/GitHb/build/third_party",
+    "d:/GitHub/pytorch/aten/src/THC",
+    '"C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/ucrt"',
+    '"C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/shared"',
+    #'"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/include"',
 ]
 ```
-
-
-
-
-
-
-
-
-
-
+## 11. 发现用的是VS2105的cl.exe
+发现Complile时用的都是VS2015的cl.exe。
+相应修改了setup.py中的include path。
+卡在了： Cannot open include file: 'THCGeneral.h': No such file or directory
+发现应该是没有生成.h文件，只有D:\GitHub\pytorch\aten\src\THC\THCGeneral.h.in
+```python
+include_dirs += [
+    cwd,
+    tmp_install_path + "/include",
+    tmp_install_path + "/include/TH",
+    tmp_install_path + "/include/THNN",
+    tmp_install_path + "/include/ATen",
+    third_party_path + "/pybind11/include",
+    os.path.join(cwd, "torch", "csrc"),
+    "d:/GitHb/build/third_party",
+    "d:/GitHub/pytorch/aten/src/THC",
+    "d:/GitHub/pytorch/aten/src",
+    '"C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/ucrt"',
+    '"C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/shared"',
+    '"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include"',
+    #'"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/include"',
+]
+```
 
 # Setup.py Build总体过程
 
@@ -248,3 +264,15 @@ CMake Error at cmake/Codegen.cmake:163 (message):
 
 #备忘
 E:\Anaconda3\envs\pytorchbuild\python.exe D:/GitHub/pytorch/cmake/../aten/src/ATen/gen.py --source-path D:/GitHub/pytorch/cmake/../aten/src/ATen --install_dir D:/GitHub/pytorch/build/aten/src/ATen D:/GitHub/pytorch/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/cmake/../aten/src/ATen/native/native_functions.yaml --output-dependencies D:/GitHub/pytorch/build/aten/src/ATen/generated_cpp.txt --install_dir D:/GitHub/pytorch/build/aten/src/ATen
+
+##setup.py寻找VC编译器设置
+envs/pytorchbuild/Lib/distutils/_msvccompiler.py
+```python
+def _find_vcvarsall(plat_spec):
+    try:
+        key = winreg.OpenKeyEx(
+            winreg.HKEY_LOCAL_MACHINE,
+            r"Software\Microsoft\VisualStudio\SxS\VC7",
+            access=winreg.KEY_READ | winreg.KEY_WOW64_32KEY
+        )
+```

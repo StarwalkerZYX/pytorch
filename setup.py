@@ -145,6 +145,8 @@ import importlib
 
 from tools.setup_helpers.env import check_env_flag, check_negative_env_flag
 
+subprocess.Popen(r'd:\GitHub\pytorch\SetUpWindowsEnv.bat')
+
 
 def hotpatch_var(var, prefix='USE_'):
     if check_env_flag('NO_' + var):
@@ -841,7 +843,11 @@ include_dirs += [
     os.path.join(cwd, "torch", "csrc"),
     "d:/GitHb/build/third_party",
     "d:/GitHub/pytorch/aten/src/THC",
-    "D:/GitHub/pytorch/third_party/eigen/Eigen/src/Core"
+    "d:/GitHub/pytorch/aten/src",
+    '"C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/ucrt"',
+    '"C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/shared"',
+    '"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include"',
+    #'"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/include"',
 ]
 
 library_dirs.append(lib_path)
