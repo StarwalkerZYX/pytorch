@@ -26,7 +26,7 @@ if (DEFINED ENV{PYTORCH_PYTHON})
   message(STATUS "Using python found in $ENV{PYTORCH_PYTHON}")
   set(PYCMD "$ENV{PYTORCH_PYTHON}")
 else()
-  SET(PYCMD "python")
+  SET(PYCMD "C:/Users/zhou.yongxin/AppData/Local/conda/conda/envs/PyTorch/python.exe")
 endif()
 
 # ---[ Write the macros file
@@ -135,18 +135,19 @@ if (NOT BUILD_ATEN_MOBILE)
   FILE(GLOB all_python "${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/*.py")
 
   SET(GEN_COMMAND
-      ${PYCMD} ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/gen.py
-      --source-path ${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen
-      --install_dir ${CMAKE_BINARY_DIR}/aten/src/ATen
+      ${PYCMD} ${CMAKE_CURRENT_LIST_DIR}/../src/ATen/gen.py
+      --source-path ${CMAKE_CURRENT_LIST_DIR}/../src/ATen
+      --install_dir ${CMAKE_BINARY_DIR}/src/ATen
       ${cwrap_files}
-  )
+        --output-dependencies ${CMAKE_BINARY_DIR}/src/ATen/generated_cpp.txt
+        --install_dir ${CMAKE_BINARY_DIR}/src/ATen
+		)
 
   message(STATUS ${GEN_COMMAND})
 
   EXECUTE_PROCESS(
       COMMAND ${GEN_COMMAND}
-        --output-dependencies ${CMAKE_BINARY_DIR}/aten/src/ATen/generated_cpp.txt
-        --install_dir ${CMAKE_BINARY_DIR}/aten/src/ATen
+
       RESULT_VARIABLE RETURN_VALUE
   )
   if (NOT RETURN_VALUE EQUAL 0)
