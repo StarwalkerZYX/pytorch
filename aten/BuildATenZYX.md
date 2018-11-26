@@ -1,1 +1,4 @@
+
+cmake -S d:/GitHub/pytorch/aten -B D:/GitHub/pytorch/aten/build -G "Visual Studio 15 2017 Win64"
+
 --source-path D:/GitHub/pytorch/aten/cmake/../src/ATen --install_dir D:/GitHub/pytorch/aten/build/src/ATen D:/GitHub/pytorch/aten/cmake/../aten/src/ATen/Declarations.cwrap D:/GitHub/pytorch/aten/cmake/../aten/src/THNN/generic/THNN.h D:/GitHub/pytorch/aten/cmake/../aten/src/THCUNN/generic/THCUNN.h D:/GitHub/pytorch/aten/cmake/../aten/src/ATen/nn.yaml D:/GitHub/pytorch/aten/cmake/../aten/src/ATen/native/native_functions.yaml --output-dependencies D:/GitHub/pytorch/aten/build/src/ATen/generated_cpp.txt --install_dir D:/GitHub/pytorch/aten/build/src/ATen

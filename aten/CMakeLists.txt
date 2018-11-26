@@ -2,6 +2,8 @@ if (BUILD_ATEN_MOBILE)
   return()
 endif()
 
+cmake_minimum_required(VERSION 3.11)
+
 # Find modules
 list(APPEND CMAKE_MODULE_PATH
   /usr/lib/x86_64-linux-gnu/
