@@ -91,7 +91,9 @@ list(APPEND ATen_CPU_INCLUDE
 list(APPEND ATen_CPU_INCLUDE
   ${CMAKE_CURRENT_SOURCE_DIR}/src
   ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/catch/single_include
-  ${CMAKE_CURRENT_BINARY_DIR}/src/ATen)
+  ${CMAKE_CURRENT_BINARY_DIR}/src/ATen
+  ${CMAKE_CURRENT_SOURCE_DIR}/..
+  ${CMAKE_CURRENT_SOURCE_DIR}/../torch/lib/include)
 add_subdirectory(src/ATen)
 
 # Pass source, includes, and libs to parent
