@@ -75,7 +75,7 @@ void Context::setBenchmarkCuDNN(bool b) {
 }
 
 bool Context::hasMKL() const {
-#if AT_MKL_ENABLED()
+#if AT_MKL_ENABLED
   return true;
 #else
   return false;
